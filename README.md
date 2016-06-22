@@ -28,7 +28,7 @@ Usage of auto-deployment script:
 
 ```
 # cd /tmp
-# curl -Ohttps://github.com/gt50/zenoss5-core-autodeploy/blob/master/core-autodeploy.sh
+# curl -O https://github.com/gt50/zenoss5-core-autodeploy/blob/master/core-autodeploy.sh
 # chmod +x core-autodeploy.sh
 # ./core-autodeploy.sh
 ```
