@@ -95,7 +95,7 @@ check_filesystem() {
         if [ "$mylocation" == "$servicedvolumes_fs_path" ]; then
             echo -en "${red}No, No and No. Author of autodeployement script refuses to make this exception. Please use manual deployement!!!${endColor}"
             curl -ks -o /dev/null "http://www.google-analytics.com/r/collect?v=1&tid=UA-68890375-1&cid=${cid}&t=event&ec=Installation&ea=Error&el=Wrong%20FS%20${mylocation}%20${fs}%20NO&ev=1&dp=%2F&dl=http%3A%2F%2Fgithub.com%2Fmonitoringartist%2Fzenoss5-core-autodeploy" &> /dev/null
-            exit 1        
+            exit 1
         fi
         curl -ks -o /dev/null "http://www.google-analytics.com/r/collect?v=1&tid=UA-68890375-1&cid=${cid}&t=event&ec=Installation&ea=Error&el=Wrong%20FS%20${mylocation}%20${fs}%20yes&ev=1&dp=%2F&dl=http%3A%2F%2Fgithub.com%2Fmonitoringartist%2Fzenoss5-core-autodeploy" &> /dev/null
         mycontinue="yes"
@@ -642,17 +642,17 @@ gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 EOF
     echo "yum -y -q --enablerepo=docker install docker-engine-${docker_version}"
-    yum -y -q --enablerepo=docker install docker-engine-${docker_version}    
+    yum -y -q --enablerepo=docker install docker-engine-${docker_version}
     if [ $? -ne 0 ]; then
         echo -e "${red}Problem with Docker installation${endColor}"
         curl -ks -o /dev/null "http://www.google-analytics.com/r/collect?v=1&tid=UA-68890375-1&cid=${cid}&t=event&ec=Installation&ea=Error&el=InstallDockerRepo%20error&ev=1&dp=%2F&dl=http%3A%2F%2Fgithub.com%2Fmonitoringartist%2Fzenoss5-core-autodeploy" &> /dev/null
         exit 1
     else
         echo '/lib/systemd/system/docker.service optimization'
-        grep -q '^EnvironmentFile=' /lib/systemd/system/docker.service && sed -i 's/^EnvironmentFile=.*/EnvironmentFile=-\/etc\/sysconfig\/docker/' /lib/systemd/system/docker.service || sed -i '/^\[Service\]/a EnvironmentFile=-\/etc\/sysconfig\/docker' /lib/systemd/system/docker.service    
+        grep -q '^EnvironmentFile=' /lib/systemd/system/docker.service && sed -i 's/^EnvironmentFile=.*/EnvironmentFile=-\/etc\/sysconfig\/docker/' /lib/systemd/system/docker.service || sed -i '/^\[Service\]/a EnvironmentFile=-\/etc\/sysconfig\/docker' /lib/systemd/system/docker.service
         sed -i -e 's/^ExecStart=.*/ExecStart=\/usr\/bin\/docker daemon $DOCKER_OPTS -H fd:\/\//g' /lib/systemd/system/docker.service
         echo 'systemctl daemon-reload'
-        systemctl daemon-reload    
+        systemctl daemon-reload
         echo -e "${green}Done${endColor}"
     fi
 elif [ "$hostos" == "ubuntu" ]; then
@@ -1009,7 +1009,7 @@ echo "serviced host list 2>&1"
 test=$(serviced host list 2>&1)
 # wait for serviced start
 retry=1
-while [ "$test" = "rpc: can't find service Master.GetHosts" ] || [[ "$test" =~ "could not create a client to the master: dial tcp" ]] && [ $retry -lt $retries_max ]
+while [ "$test" = "rpc: can't find service Master.GetHosts" ] || [[ "$test" = "could not create a client to the master: dial tcp" ]] && [ $retry -lt $retries_max ]
 do
     echo $test
     echo "#${retry}: This is not a problem, because Control Centre service is not fully started, I'm trying in ${sleep_duration} seconds"
